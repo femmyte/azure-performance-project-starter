@@ -32,12 +32,12 @@ config_integration.trace_integrations(['requests'])
 # Standard Logging
 logger = logging.getLogger(__name__)
 handler = AzureLogHandler(
-    connection_string='InstrumentationKey=990d68dd-d6fc-4a94-b1f4-5c534e660abd;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/')
+    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 # Logging custom Events
 logger.addHandler(AzureEventHandler(
-    connection_string='InstrumentationKey=990d68dd-d6fc-4a94-b1f4-5c534e660abd;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/'))
+    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437'))
 # Set the logging level
 logger.setLevel(logging.INFO)
 
@@ -46,14 +46,14 @@ logger.setLevel(logging.INFO)
 # TODO: Setup exporter
 exporter = metrics_exporter.new_metrics_exporter(
     enable_standard_metrics=True,
-    connection_string='InstrumentationKey=990d68dd-d6fc-4a94-b1f4-5c534e660abd;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/')
+    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437')
 view_manager.register_exporter(exporter)
 
 # Tracing
 # TODO: Setup tracer
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string='InstrumentationKey=990d68dd-d6fc-4a94-b1f4-5c534e660abd;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/'),
+        connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437'),
     sampler=ProbabilitySampler(1.0),
 )
 
@@ -64,7 +64,7 @@ app = Flask(__name__)
 middleware = FlaskMiddleware(
     app,
     exporter=AzureExporter(
-        connection_string="InstrumentationKey=990d68dd-d6fc-4a94-b1f4-5c534e660abd;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"),
+        connection_string="InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437"),
     sampler=ProbabilitySampler(rate=1.0)
 )
 
@@ -89,27 +89,27 @@ else:
 # Redis Connection
 r = redis.Redis()
 
-"""
-# The commented section below is used while deploying the application with two separate containers - 
-# One container for Redis and another for the frontend. 
+
+# The commented section below is used while deploying the application with two separate containers -
+# One container for Redis and another for the frontend.
 
 # Redis configurations
-redis_server = os.environ['REDIS']
+# redis_server = os.environ['REDIS']
 
-try:
-    if "REDIS_PWD" in os.environ:
-        r = redis.StrictRedis(host=redis_server,
-                        port=6379,
-                        password=os.environ['REDIS_PWD'])
-    else:
-        r = redis.Redis(redis_server)
-    r.ping()
-except redis.ConnectionError:
-    exit('Failed to connect to Redis, terminating.')
-"""
+# try:
+#     if "REDIS_PWD" in os.environ:
+#         r = redis.StrictRedis(host=redis_server,
+#                               port=6379,
+#                               password=os.environ['REDIS_PWD'])
+#     else:
+#         r = redis.Redis(redis_server)
+#     r.ping()
+# except redis.ConnectionError:
+#     exit('Failed to connect to Redis, terminating.')
+
 # Change title to host name to demo NLB
-if app.config['SHOWHOST'] == "true":
-    title = socket.gethostname()
+# if app.config['SHOWHOST'] == "true":
+#     title = socket.gethostname()
 
 # Init Redis
 if not r.get(button1):
