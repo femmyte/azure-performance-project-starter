@@ -32,12 +32,12 @@ config_integration.trace_integrations(['requests'])
 # Standard Logging
 logger = logging.getLogger(__name__)
 handler = AzureLogHandler(
-    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437')
+    connection_string='InstrumentationKey=ad6ec047-fea5-4220-9a36-d6cfe308a412')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 # Logging custom Events
 logger.addHandler(AzureEventHandler(
-    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437'))
+    connection_string='InstrumentationKey=ad6ec047-fea5-4220-9a36-d6cfe308a412'))
 # Set the logging level
 logger.setLevel(logging.INFO)
 
@@ -46,14 +46,14 @@ logger.setLevel(logging.INFO)
 # TODO: Setup exporter
 exporter = metrics_exporter.new_metrics_exporter(
     enable_standard_metrics=True,
-    connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437')
+    connection_string='InstrumentationKey=ad6ec047-fea5-4220-9a36-d6cfe308a412')
 view_manager.register_exporter(exporter)
 
 # Tracing
 # TODO: Setup tracer
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string='InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437'),
+        connection_string='InstrumentationKey=ad6ec047-fea5-4220-9a36-d6cfe308a412'),
     sampler=ProbabilitySampler(1.0),
 )
 
@@ -64,7 +64,7 @@ app = Flask(__name__)
 middleware = FlaskMiddleware(
     app,
     exporter=AzureExporter(
-        connection_string="InstrumentationKey=b7307447-3818-4fc1-ad4d-67e7cf5c5437"),
+        connection_string="InstrumentationKey=ad6ec047-fea5-4220-9a36-d6cfe308a412"),
     sampler=ProbabilitySampler(rate=1.0)
 )
 
@@ -171,6 +171,6 @@ def index():
 
 if __name__ == "__main__":
     # TODO: Use the statement below when running locally
-    app.run()
+    # app.run()
     # TODO: Use the statement below before deployment to VMSS
-    # app.run(host='0.0.0.0', threaded=True, debug=True) # remote
+    app.run(host='0.0.0.0', threaded=True, debug=True)  # remote
